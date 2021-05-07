@@ -4,6 +4,7 @@ import socketIOClient from 'socket.io-client';
 
 function App() {
   const [tasks, setTasks] = useState([]);
+  const [timeElapsed, setTimeElapsed] = useState(null);
 
   const socket = useRef(null);
 
@@ -21,6 +22,9 @@ function App() {
         ...(tasks.some((t) => t.tid === data.tid) ? [] : [data])
       ]);
     });
+    socket.current.on('finished', (data) => {
+      setTimeElapsed(data.timeElapsed);
+    });
     return () => {
       socket.current.disconnect();
     };
@@ -30,17 +34,21 @@ function App() {
   useEffect(() => {}, [tasks]);
 
   function startTask() {
+    setTimeElapsed(null);
     socket.current.emit('task');
   }
 
   return (
     <div className="w-full flex flex-col min-h-screen px-32 bg-gray-800 justify-center items-center">
       <button
-        className="bg-indigo-600 py-2 px-4 rounded-md text-xl text-white mb-8"
+        className="bg-indigo-600 py-2 px-4 rounded-md text-xl text-white"
         onClick={startTask}
       >
         Start tasks
       </button>
+      <div className="w-full flex items-center justify-center h-16 text-xl text-white">
+        {timeElapsed ? `Time elapsed: ${timeElapsed}` : ''}
+      </div>
       <div className="w-1/2 flex flex-col h-96 overflow-y-auto border-2 border-white rounded-md">
         <div className="w-full flex flex-row justify-between px-16 py-2 border-b-2 border-white">
           <span className="text-lg text-white">Task id</span>

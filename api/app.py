@@ -1,6 +1,6 @@
 from flask import Flask, request
 from flask_socketio import SocketIO, join_room
-from celery import Celery
+from celery import Celery, group
 import time
 import uuid
 
@@ -27,20 +27,25 @@ def not_found(e):
 
 @socketio.on("task")
 def start_task():
-    for i in range(16):
-        long_task.delay()
+    tic = time.time()
+    jobs = group([long_task.s(i) for i in range(4)])
+    async_res = jobs.apply_async()
+    result = async_res.get()
+    toc = time.time()
+    time_elapsed = round(toc - tic, 3)
+    socketio.emit("finished", {"timeElapsed": time_elapsed})
 
 
 @celery.task()
-def long_task():
+def long_task(id):
     tid = str(uuid.uuid4())[:8]
     socketio = SocketIO(message_queue="redis://localhost:6379")
     timer = 10 ** 6
     while timer >= 0:
-        if timer % 50000 == 0:
+        if timer % 100000 == 0:
             socketio.emit("timer", {"timer": timer, "tid": tid})
         timer -= 1
-    return
+    return id
 
 
 if __name__ == "__main__":
