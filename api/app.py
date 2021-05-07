@@ -27,17 +27,18 @@ def not_found(e):
 
 @socketio.on("task")
 def start_task():
-    long_task.delay()
+    for i in range(16):
+        long_task.delay()
 
 
 @celery.task()
 def long_task():
     tid = str(uuid.uuid4())[:8]
     socketio = SocketIO(message_queue="redis://localhost:6379")
-    timer = 5
+    timer = 10 ** 6
     while timer >= 0:
-        socketio.emit("timer", {"timer": timer, "tid": tid})
-        time.sleep(1)
+        if timer % 50000 == 0:
+            socketio.emit("timer", {"timer": timer, "tid": tid})
         timer -= 1
     return
 

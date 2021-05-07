@@ -39,7 +39,7 @@ function App() {
         className="bg-indigo-600 py-2 px-4 rounded-md text-xl text-white mb-8"
         onClick={startTask}
       >
-        Start task
+        Start tasks
       </button>
       <div className="w-1/2 flex flex-col h-96 overflow-y-auto border-2 border-white rounded-md">
         <div className="w-full flex flex-row justify-between px-16 py-2 border-b-2 border-white">
