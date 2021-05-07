@@ -10,15 +10,6 @@ function App() {
   useEffect(() => {
     socket.current = socketIOClient();
     socket.current.on('timer', (data) => {
-      let updateTasks = tasks.map(({ timer, tid }) =>
-        data.tid === tid
-          ? { timer: data.timer, tid: tid }
-          : { timer: timer, tid: tid }
-      );
-      updateTasks = tasks.filter((task) => task.timer > 0);
-      if (data.timer === 5) {
-        updateTasks.push(data);
-      }
       setTasks((tasks) => [
         ...tasks
           .map(({ timer, tid }) =>
