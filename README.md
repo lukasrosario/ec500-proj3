@@ -12,9 +12,11 @@
 
 - clone the repo
 - ```
-  $ cd api
+  $ cd ec500-proj3/api
+  $ python -m venv venv
+  $ source venv/bin/activate
   $ pip install -r requirements.txt
-  $ python app.py
+  $ flask run
   ```
 - install and start redis on your machine
 - open another terminal window and run
