@@ -8,8 +8,11 @@ click==7.1.2
 click-didyoumean==0.0.3
 click-plugins==1.1.1
 click-repl==0.1.6
+dnspython==1.16.0
+eventlet==0.31.0
 Flask==1.1.2
 Flask-SocketIO==5.0.1
+greenlet==1.1.0
 itsdangerous==1.1.0
 Jinja2==2.11.3
 kombu==5.0.2
@@ -27,3 +30,5 @@ toml==0.10.2
 vine==5.0.0
 wcwidth==0.2.5
 Werkzeug==1.0.1
+zope.event==4.5.0
+zope.interface==5.4.0
